@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'HomePage.dart';
 
 void main() {
   runApp(MyApp());
@@ -83,7 +83,8 @@ class _LoginDemoState extends State<LoginDemo> {
                   color: Colors.green, borderRadius: BorderRadius.circular(20)),
               child: TextButton(
                 onPressed: () {
-
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => HomePage()));
                   },
                 child: Text(
                   'Login',
