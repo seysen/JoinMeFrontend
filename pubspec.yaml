@@ -1,5 +1,5 @@
 name: my_f_app
-description: A new Flutter project.
+description: The JoinMe Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,6 +30,9 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.3
+  json_annotation: ^4.3.0
+  shared_preferences: ^2.0.8
+  provider: ^6.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -40,7 +43,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  http:
+  build_runner: ^2.1.4
+  json_serializable: ^6.0.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -61,7 +65,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - asset/images/
+    - asset/images/JoinMeLogo.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
