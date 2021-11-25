@@ -6,7 +6,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> responseData) {
     return User(
-        id: responseData['userid'] as int,
+        id: int.parse(responseData['userid']) as int,
         jwt: responseData['token'] as String,
     );
   }

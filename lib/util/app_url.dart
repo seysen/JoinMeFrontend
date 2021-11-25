@@ -5,4 +5,6 @@ class ApiUrl {
   static const String baseURL = localBaseUrl;
   static const String login = baseURL + '/login';
   static const String register = baseURL + "/register";
+
+  static const String events = baseURL + "/events";
 }
