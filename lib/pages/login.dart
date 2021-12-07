@@ -117,7 +117,7 @@ class _LoginState extends State<Login> {
 
     final forgotPasswordButton = TextButton(
       onPressed: () {
-//            Navigator.pushNamed(context, '/reset-password');
+//            Navigator.pushNamed(context, '/dashboard');
       },
       child: Text(
         'Forgot password',

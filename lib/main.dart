@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:my_f_app/pages/events.dart';
+import 'package:my_f_app/providers/event_provider.dart';
 import 'package:provider/provider.dart';
 import 'pages/login.dart';
 import 'pages/register.dart';
@@ -21,7 +23,8 @@ class JoinMeApp extends StatelessWidget {
 
     return MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => AuthProvider()),
-      ChangeNotifierProvider(create: (_) => UserProvider())
+      ChangeNotifierProvider(create: (_) => UserProvider()),
+      ChangeNotifierProvider(create: (_) => EventProvider())
     ],
       child: MaterialApp(
         theme: ThemeData(
@@ -60,7 +63,8 @@ class JoinMeApp extends StatelessWidget {
         routes: {
           '/dashboard': (context) => DashBoard(),
           '/login': (context) => Login(),
-          '/register': (context) => Register()
+          '/register': (context) => Register(),
+          '/events': (context) => EventsPage()
         },
       ),
     );
