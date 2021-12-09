@@ -90,7 +90,7 @@ class _EventsPageState extends State<EventsPage> {
       nameTextController.clear();
       photoTextController.clear();
       descriptionTextController.clear();
-      Navigator.pushReplacementNamed(context, '/dashboard');
+      Navigator.pushReplacementNamed(context, '/events_slider');
     }
 
     uploadImage() {
