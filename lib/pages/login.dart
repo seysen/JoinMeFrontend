@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../domain/user.dart';
 
 class Login extends StatefulWidget {
-
   @override
   _LoginState createState() => _LoginState();
 }
@@ -28,13 +27,13 @@ class _LoginState extends State<Login> {
         form.save();
 
         final Future<Map<String, dynamic>> successfulMessage =
-        auth.login(_email, _password);
+            auth.login(_email, _password);
 
         successfulMessage.then((response) {
           if (response['status']) {
             User user = response['user'];
             Provider.of<UserProvider>(context, listen: false).setUser(user);
-            Navigator.pushReplacementNamed(context, '/dashboard');
+            Navigator.pushReplacementNamed(context, '/events_slider');
           } else {
             return showDialog<void>(
               context: context,
@@ -70,11 +69,9 @@ class _LoginState extends State<Login> {
         onSaved: (value) => _email = value,
         decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-          contentPadding: EdgeInsets.symmetric(
-              horizontal: 16.0, vertical: 8.0),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           hintText: 'email',
-        )
-    );
+        ));
 
     final passwordField = TextFormField(
         autofocus: false,
@@ -83,11 +80,9 @@ class _LoginState extends State<Login> {
         onSaved: (value) => _password = value,
         decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-          contentPadding: EdgeInsets.symmetric(
-              horizontal: 16.0, vertical: 8.0),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           hintText: 'Password',
-        )
-    );
+        ));
 
     final loginButton = MaterialButton(
       onPressed: doLogin,
@@ -103,8 +98,7 @@ class _LoginState extends State<Login> {
       height: 45,
       minWidth: 600,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5))
-      ),
+          borderRadius: BorderRadius.all(Radius.circular(5))),
     );
 
     var loading = Row(
@@ -137,35 +131,46 @@ class _LoginState extends State<Login> {
 
     return SafeArea(
         child: Scaffold(
-          body: Center(
-            child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.all(40.0),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      SizedBox(height: 20.0,),
-                      logo,
-                      SizedBox(height: 20.0,),
-                      emailField,
-                      SizedBox(height: 10.0,),
-                      passwordField,
-                      SizedBox(height: 10.0,),
-                      auth.loggedInStatus == Status.Authenticating
-                          ? loading
-                          : loginButton,
-                      SizedBox(height: 5.0,),
-                      forgotPasswordButton,
-                      SizedBox(height: 5.0,),
-                      registerButton
-                    ],
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(40.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20.0,
                   ),
-                ),
+                  logo,
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  emailField,
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  passwordField,
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  auth.loggedInStatus == Status.Authenticating
+                      ? loading
+                      : loginButton,
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  forgotPasswordButton,
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  registerButton
+                ],
               ),
             ),
           ),
-        )
-    );
+        ),
+      ),
+    ));
   }
 }

@@ -38,6 +38,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
+  flutter_swipable: ^1.2.1
+  rxdart: ^0.27.1
+  intl: ^0.17.0
+  sliding_up_panel: ^2.0.0+1
+
 
 
 dev_dependencies:
