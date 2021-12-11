@@ -7,4 +7,6 @@ class ApiUrl {
   static const String register = baseURL + "/register";
 
   static const String events = baseURL + "/events";
+
+  static const String joinEvent = baseURL + "/events/join";
 }

@@ -3,9 +3,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipable/flutter_swipable.dart';
+import 'package:my_f_app/domain/user.dart';
+import 'package:my_f_app/providers/events_slider_api_provider.dart';
+import 'package:my_f_app/providers/user_provider.dart';
 import 'package:my_f_app/service/event_browse_service.dart';
 import 'package:my_f_app/domain/event_slider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class EventCard extends StatelessWidget {
@@ -19,14 +23,24 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<UserProvider>(context).user;
+    var _eventsApi = EventsSliderApiProvider(); // HTTP ЗАПРОС ЗДЕСЬ!!
+
     return Swipable(
         verticalSwipe: false,
         onSwipeLeft: (finalPosition) {
           EventBrowseService().swipedLeft(index, event);
         },
-        onSwipeRight: (finalPosition) {
-          Navigator.pushReplacementNamed(context, '/dashboard');
-          // ЗАМЕНИТЬ ПЕРЕХОДОМ В ЗАГЛУШКУ СООБЩЕНИЯ
+        onSwipeRight: (finalPosition) async {
+          int result =
+              await EventsSliderApiProvider().joinEvent(user.id, event.id);
+
+          if (result == 200) {
+            // print("RESPONSE WAS OK!!!--------");
+            Navigator.pushReplacementNamed(context,
+                '/dashboard'); // ЗАМЕНИТЬ НА ЗАГЛУШКУ - КАРТИНКУ С СООБЩЕНИЯМИ!!!!!!!!
+          }
+          // если присоединиться не получилось то переходим к след карточке
         },
         onPositionChanged: (details) {},
         onSwipeStart: (details) {},
