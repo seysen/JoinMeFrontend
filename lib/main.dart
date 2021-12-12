@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:my_f_app/pages/events.dart';
 import 'package:my_f_app/pages/events_slider_page.dart';
+import 'package:my_f_app/pages/fake_chat.dart';
 import 'package:my_f_app/providers/event_provider.dart';
 import 'package:provider/provider.dart';
 import 'pages/login.dart';
@@ -67,7 +68,8 @@ class JoinMeApp extends StatelessWidget {
           '/login': (context) => Login(),
           '/register': (context) => Register(),
           '/events': (context) => EventsPage(),
-          '/events_slider': (context) => EventsSliderPage()
+          '/events_slider': (context) => EventsSliderPage(),
+          '/fake_chat': (context) => FakeChatPage()
         },
       ),
     );

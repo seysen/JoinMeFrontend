@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:my_f_app/domain/event.dart';
 import 'package:my_f_app/domain/user.dart';
 import 'package:my_f_app/providers/event_provider.dart';
 import 'package:my_f_app/providers/user_provider.dart';
+import 'package:my_f_app/service/app_panels.dart';
 import 'package:provider/provider.dart';
 
 class EventsPage extends StatefulWidget {
@@ -153,7 +153,7 @@ class _EventsPageState extends State<EventsPage> {
 
     final eventDescriptionField = Container(
         width: 500,
-        height: 150,
+        height: 120,
         child: TextFormField(
             controller: descriptionTextController,
             autofocus: false,
@@ -241,50 +241,50 @@ class _EventsPageState extends State<EventsPage> {
       ],
     );
 
-    final logo = Image.asset(
-      'asset/images/JoinMeLogo.png',
+    final logo = SizedBox(
+        width: 88,
+        height: 70,
+        child: Image.asset(
+          'asset/images/JoinMeLogo.png',
+        )
     );
+
+    final bottomPanel = JoinMeAppPanels().getBottomPanel(context);
 
     //HERE HOW IT VIEWED
     return SafeArea(
         child: Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(40.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 5.0,
+          body: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.all(5.0),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 5.0),
+                      logo,
+                      SizedBox(height: 5.0),
+                      eventNameField,
+                      /*
+                          SizedBox(height: 20.0,),
+                          eventDateField,
+                          SizedBox(height: 20.0,),
+                          eventTagsField,
+                           */
+                      SizedBox(height: 5.0),
+                      workWithAva,
+                      SizedBox(height: 5.0),
+                      eventDescriptionField,
+                      saveButtonsRow
+                    ],
                   ),
-                  logo,
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  eventNameField,
-                  /*
-                      SizedBox(height: 20.0,),
-                      eventDateField,
-                      SizedBox(height: 20.0,),
-                      eventTagsField,
-                       */
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  workWithAva,
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  eventDescriptionField,
-                  saveButtonsRow,
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
-    ));
+          bottomSheet: bottomPanel,
+      )
+    );
   }
 }
