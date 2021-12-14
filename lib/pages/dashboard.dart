@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_f_app/domain/user.dart';
 import 'package:my_f_app/providers/user_provider.dart';
+import 'package:my_f_app/service/app_panels.dart';
 import 'package:provider/provider.dart';
 
 class DashBoard extends StatefulWidget {
@@ -25,6 +26,8 @@ class _DashBoardState extends State<DashBoard> {
       ),
     );
 
+    final bottomPanel = JoinMeAppPanels().getBottomPanel(context);
+
     return Scaffold(
       body: Column(
         children: [
@@ -37,6 +40,7 @@ class _DashBoardState extends State<DashBoard> {
           SizedBox(height: 100),
         ],
       ),
+      bottomSheet: bottomPanel,
     );
   }
 }

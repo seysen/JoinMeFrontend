@@ -9,4 +9,6 @@ class ApiUrl {
   static const String events = baseURL + "/events";
 
   static const String joinEvent = baseURL + "/events/join";
+
+  static const String fakeChat = baseURL + "/fake_chat";
 }
