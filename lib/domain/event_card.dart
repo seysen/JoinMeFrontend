@@ -37,8 +37,7 @@ class EventCard extends StatelessWidget {
 
           if (result == 200) {
             // print("RESPONSE WAS OK!!!--------");
-            Navigator.pushReplacementNamed(context,
-                '/dashboard'); // ЗАМЕНИТЬ НА ЗАГЛУШКУ - КАРТИНКУ С СООБЩЕНИЯМИ!!!!!!!!
+            Navigator.pushReplacementNamed(context, '/fake_chat');
           }
           // если присоединиться не получилось то переходим к след карточке
         },

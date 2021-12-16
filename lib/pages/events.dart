@@ -1,9 +1,12 @@
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:my_f_app/domain/user.dart';
 import 'package:my_f_app/providers/event_provider.dart';
 import 'package:my_f_app/providers/user_provider.dart';
 import 'package:my_f_app/service/app_panels.dart';
+import 'package:my_f_app/util/validators.dart';
 import 'package:provider/provider.dart';
 
 class EventsPage extends StatefulWidget {
@@ -15,10 +18,10 @@ class _EventsPageState extends State<EventsPage> {
   final formKey = new GlobalKey<FormState>();
 
   final nameTextController = TextEditingController();
-  final photoTextController = TextEditingController();
   final descriptionTextController = TextEditingController();
+  final dateTextController = TextEditingController();
 
-  String _eventName, _description, _linkAva;
+  String _eventName, _description, _linkAva, _eventDate;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,7 @@ class _EventsPageState extends State<EventsPage> {
       if (form.validate()) {
         form.save();
         eventProvider
-            .create(_eventName, _description, _linkAva, user.id)
+            .create(_eventName, _description, _linkAva, user.id, _eventDate)
             .then((response) {
           if (response['status']) {
             showDialog<void>(
@@ -88,13 +91,104 @@ class _EventsPageState extends State<EventsPage> {
 
     cancel() {
       nameTextController.clear();
-      photoTextController.clear();
       descriptionTextController.clear();
+      dateTextController.clear();
       Navigator.pushReplacementNamed(context, '/events_slider');
     }
 
-    uploadImage() {
-      //todo selecting and uploading event ava
+    postImageToAWS(String imageFilePath) async {
+      eventProvider
+          .getAvatarLinkFromAWS(File(imageFilePath))
+          .then((response) {
+        if (response['status']) {
+          _linkAva = response['data'];
+          showDialog<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text(response['message']),
+                  content: Image.file(
+                    File(imageFilePath),
+                    fit: BoxFit.fitWidth,
+                    width: 150,
+                    height: 150,
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                        child: Text('Ok'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        })
+                  ],
+                );
+              });
+        } else {
+          return showDialog<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text(response['message']),
+                  content: Text(response['data']),
+                  actions: <Widget>[
+                    TextButton(
+                        child: Text('Ok'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        })
+                  ],
+                );
+              });
+        }
+      });
+    }
+
+    uploadImage() async {
+      FilePickerResult fileFromFilePicker = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+      );
+
+      if(fileFromFilePicker != null) {
+        String imageFilePath = fileFromFilePicker.files.single.path;
+        int imageSize = File(imageFilePath).lengthSync();
+
+        if (imageSize/1048576 < 3 ) {
+          postImageToAWS(imageFilePath);
+        } else {
+          fileFromFilePicker == null;
+          return showDialog<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Your image too big'),
+                  content: Text('Your image should be less then 3 MB'),
+                  actions: <Widget>[
+                    TextButton(
+                        child: Text('Ok'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        })
+                  ],
+                );
+              });
+        }
+      } else {
+        //user canceled file picker
+        return showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('You canceled uploading'),
+                content: Text('Image uploading canceled'),
+                actions: <Widget>[
+                  TextButton(
+                      child: Text('Ok'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      })
+                ],
+              );
+            });
+      }
     }
 
     final eventNameField = TextFormField(
@@ -110,50 +204,22 @@ class _EventsPageState extends State<EventsPage> {
                 EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             hintText: 'Name of new Event'));
 
-    /* For future form with date of event
     final eventDateField = TextFormField(
         controller: dateTextController,
         autofocus: false,
-        onSaved: (value) => _eventTags = value,
+        validator: validateEventDate,
+        onSaved: (value) => _eventDate = value,
         decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
             contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             hintText: 'Date of new Event'
         )
-    ); */
+    );
 
-    /* For future form with tags
-    final eventTagsField = TextFormField(
-        controller: tagsTextController,
-        autofocus: false,
-        onSaved: (value) => _eventName = value,
-        decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-            contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            hintText: 'Tags for new Event'
-        )
-    ); */
-
-    final eventAvaField = Container(
-        width: 80,
-        height: 80,
-        child: TextFormField(
-            controller: photoTextController,
-            autofocus: false,
-            expands: true,
-            minLines: null,
-            maxLines: null,
-            onSaved: (value) => _linkAva = value,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                hintText: 'Photo')));
 
     final eventDescriptionField = Container(
         width: 500,
-        height: 120,
+        height: 100,
         child: TextFormField(
             controller: descriptionTextController,
             autofocus: false,
@@ -172,24 +238,20 @@ class _EventsPageState extends State<EventsPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(32.0, 8.0, 8.0, 8.0),
-          child: eventAvaField,
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8.0, 8.0, 32.0, 8.0),
+          padding: const EdgeInsets.all(8.0),
           child: MaterialButton(
             onPressed: () => uploadImage(),
             textColor: Colors.white,
             color: Color(0xFF0069C0),
             child: SizedBox(
-              width: 50,
+              width: 150,
               child: Text(
-                'Upload',
+                'Upload image for event',
                 textAlign: TextAlign.center,
               ),
             ),
-            height: 30,
-            minWidth: 50,
+            height: 40,
+            minWidth: 150,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
           ),
@@ -266,12 +328,8 @@ class _EventsPageState extends State<EventsPage> {
                       logo,
                       SizedBox(height: 5.0),
                       eventNameField,
-                      /*
-                          SizedBox(height: 20.0,),
-                          eventDateField,
-                          SizedBox(height: 20.0,),
-                          eventTagsField,
-                           */
+                      SizedBox(height: 5.0,),
+                      eventDateField,
                       SizedBox(height: 5.0),
                       workWithAva,
                       SizedBox(height: 5.0),

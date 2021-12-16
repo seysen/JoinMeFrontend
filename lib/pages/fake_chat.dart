@@ -57,11 +57,6 @@ class _FakeChatPageState extends State<FakeChatPage> {
       );
     }
 
-   /* final appBar = AppBar(
-      title: Text("JoinMe"),
-      backgroundColor: Color(0xFF0069C0),
-    ); */
-
     final topPanel = JoinMeAppPanels().getTopPanel(context);
 
     final bottomPanel = JoinMeAppPanels().getBottomPanel(context);
@@ -214,12 +209,10 @@ class _FakeChatPageState extends State<FakeChatPage> {
           body: Center(
             child: SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.all(5.0),
                 child: Form(
                   key: formKey,
                   child: Column(
                     children: [
-                      //appBar,
                       topPanel,
                       SizedBox(height: 10.0),
                       firstMessagesRow,

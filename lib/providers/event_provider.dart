@@ -1,5 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:path/path.dart';
+import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +32,42 @@ class EventProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Map<String, dynamic>> create(String eventName, String description, String linkAva, int creatorID) async {
+  Future<Map<String, dynamic>> getAvatarLinkFromAWS(File imageFile) async {
+    var stream = new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+    var length = await imageFile.length();
+    var request = new http.MultipartRequest("POST", Uri.parse(ApiUrl.loadImage));
+
+    var multipartFile = new http.MultipartFile('image', stream, length, filename: basename(imageFile.path));
+
+    request.files.add(multipartFile);
+    final response = await request.send();
+    final answer = await http.Response.fromStream(response);
+
+    var result;
+    if (answer.statusCode == 200) {
+      result = {
+        'status': true,
+        'message': 'Image uploaded successfully',
+        'data': answer.body
+      };
+    } else {
+      result = {
+        'status': false,
+        'message': 'Image did not uploaded',
+        'data': answer.body
+      };
+    }
+    return result;
+  }
+
+  Future<Map<String, dynamic>> create(String eventName, String description, String linkAva, int creatorID, String eventDate) async {
 
     final Map<String, dynamic> creationData = {
         'name' : eventName,
         'description' : description,
         'link_ava' : linkAva,
-        'creator_id' : creatorID
+        'creator_id' : creatorID,
+        'date' : eventDate + "T00:00:00Z"
     };
 
     _createdStatus = Status.Creating;
