@@ -47,7 +47,7 @@ class _EventsPageState extends State<EventsPage> {
                           child: Text('Ok'),
                           onPressed: () {
                             Navigator.pushReplacementNamed(
-                                context, '/dashboard');
+                                context, '/fake_chat');
                           })
                     ],
                   );
@@ -93,7 +93,7 @@ class _EventsPageState extends State<EventsPage> {
       nameTextController.clear();
       descriptionTextController.clear();
       dateTextController.clear();
-      Navigator.pushReplacementNamed(context, '/events_slider');
+      Navigator.pushReplacementNamed(context, '/profile_page');
     }
 
     postImageToAWS(String imageFilePath) async {

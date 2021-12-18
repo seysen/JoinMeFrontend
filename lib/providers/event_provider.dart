@@ -24,11 +24,19 @@ class EventProvider with ChangeNotifier {
   Event _event = Event();
   Event get event => _event;
 
+  var _events = <Event>[];
+  List<Event> get events => _events;
+
   Status _createdStatus = Status.NotCreated;
   Status get createdStatus => _createdStatus;
 
   void setEvent(Event event) {
     _event = event;
+    notifyListeners();
+  }
+
+  void setEvents(var events) {
+    _events = events;
     notifyListeners();
   }
 

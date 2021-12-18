@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:my_f_app/pages/events.dart';
 import 'package:my_f_app/pages/events_slider_page.dart';
 import 'package:my_f_app/pages/fake_chat.dart';
+import 'package:my_f_app/pages/profile_page.dart';
 import 'package:my_f_app/providers/event_provider.dart';
 import 'package:provider/provider.dart';
 import 'pages/login.dart';
 import 'pages/register.dart';
-import 'pages/dashboard.dart';
 import 'providers/auth_provider.dart';
 import 'providers/user_provider.dart';
 import 'util/shared_preferences.dart';
@@ -54,7 +54,7 @@ class JoinMeApp extends StatelessWidget {
                       ascii.decode(base64.decode(base64.normalize(jwt[1]))));
                   if (DateTime.fromMicrosecondsSinceEpoch(decode["exp"] * 1000)
                       .isAfter(DateTime.now())) {
-                    return DashBoard();
+                    return EventsSliderPage();//replace with swiper
                   } else {
                     return Login();
                   }
@@ -64,12 +64,12 @@ class JoinMeApp extends StatelessWidget {
               }
             }),
         routes: {
-          '/dashboard': (context) => DashBoard(),
           '/login': (context) => Login(),
           '/register': (context) => Register(),
           '/events': (context) => EventsPage(),
           '/events_slider': (context) => EventsSliderPage(),
-          '/fake_chat': (context) => FakeChatPage()
+          '/fake_chat': (context) => FakeChatPage(),
+          '/profile_page': (context) => ProfilePage()
         },
       ),
     );

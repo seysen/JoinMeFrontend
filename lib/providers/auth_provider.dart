@@ -49,7 +49,7 @@ class AuthProvider with ChangeNotifier {
 
     if (response.statusCode == 200) {
 
-      var responseBody = json.decode(response.body);
+      var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
       var authUser = User.fromJson(responseBody);
 
       UserPreferences().saveUser(authUser);
@@ -95,7 +95,7 @@ class AuthProvider with ChangeNotifier {
      final Map<String, dynamic> responseData = json.decode(response.body);
 
     if (response.statusCode == 201) {
-      var responseBody = json.decode(response.body);
+      var responseBody = jsonDecode(utf8.decode(response.bodyBytes));
       var authUser = User.fromJson(responseBody);
       UserPreferences().saveUser(authUser);
 

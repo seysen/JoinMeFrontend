@@ -120,7 +120,7 @@ class JoinMeAppPanels {
                 tooltip: 'Profile',
                 onPressed: () {
                   Navigator.pushReplacementNamed(context,
-                      '/dashboard'); // !!! сюда вставлять профиль а в профиле кнопка добавить событие
+                      '/profile_page'); // !!! сюда вставлять профиль а в профиле кнопка добавить событие
                 },
               ),
               Text(

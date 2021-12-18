@@ -11,4 +11,6 @@ class ApiUrl {
   static const String loadImage = baseURL + "/image";
 
   static const String fakeChat = baseURL + "/fake_chat";
+
+  static const String userEvents = "/events/user";
 }
